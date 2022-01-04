@@ -1,0 +1,35 @@
+name: 'Build & Deploy to EKS'
+on:
+  push:
+    branches:
+      - main
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+  EKS_CLUSTER: ${{ secrets.EKS_CLUSTER }}
+  EKS_REGION: ${{ secrets.EKS_REGION }}
+# SKAFFOLD_DEFAULT_REPO: 
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+    steps:
+      # Install Node.js dependencies
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install
+      - run: npm test
+      # Install Skaffold and kubectl
+      - name: Install kubectl and skaffold
+        uses: daisaru11/setup-cd-tools@v1
+        with:
+          kubectl: "v1.23.1"
+          skaffold: "v1.35.1"
+      # Check AWS version
+      - name: Check AWS version
+        run: aws --version
