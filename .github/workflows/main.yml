@@ -6,9 +6,10 @@ on:
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
   EKS_CLUSTER: ${{ secrets.EKS_CLUSTER }}
   EKS_REGION: ${{ secrets.EKS_REGION }}
+  DOCKER_ID: ${{ secrets.DOCKER_ID }}
+  DOCKER_PW: ${{ secrets.DOCKER_PW }}
 # SKAFFOLD_DEFAULT_REPO: 
 jobs:
   deploy:
