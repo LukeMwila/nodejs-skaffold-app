@@ -25,6 +25,12 @@ jobs:
           node-version: '14'
       - run: npm install
       - run: npm test
+      # Login to Docker registry
+        name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_ID }}
+          password: ${{ secrets.DOCKER_PW }}
       # Install kubectl
       - name: Install kubectl
         run: |
@@ -34,6 +40,32 @@ jobs:
 
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
           kubectl version --client
-      # Check AWS version
+      # Install Skaffold
+      - name: Install Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64 && \
+          sudo install skaffold /usr/local/bin/
+          skaffold version
+      # Cache skaffold image builds & config
+      - name: Cache skaffold image builds & config
+        uses: actions/cache@v2
+        with:
+          path: ~/.skaffold/
+          key: fixed-${{ github.sha }}
+      # Check AWS version and configure profile
       - name: Check AWS version
-        run: aws --version
+        run: |
+          aws --version
+          aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+          aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+          aws configure set region $EKS_REGION
+          aws sts get-caller-identity
+      # Connect to EKS cluster
+      - name: Connect to EKS cluster 
+        run: aws eks --region $EKS_REGION update-kubeconfig --name $EKS_CLUSTER
+      # Build and deploy to EKS cluster
+      - name: Build and then deploy to EKS cluster with Skaffold
+        run: skaffold run
+      # Verify deployment
+      - name: Verify deployment
+        run: kubectl get pods
