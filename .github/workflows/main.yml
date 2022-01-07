@@ -10,7 +10,6 @@ env:
   EKS_REGION: ${{ secrets.EKS_REGION }}
   DOCKER_ID: ${{ secrets.DOCKER_ID }}
   DOCKER_PW: ${{ secrets.DOCKER_PW }}
-# SKAFFOLD_DEFAULT_REPO: 
 jobs:
   deploy:
     name: Deploy
