@@ -10,11 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://lukondemwila@bitbucket.org/lukondemwila/nodejs-express-test.git"
+    "url": "git+https://github.com/LukeMwila/nodejs-skaffold-app.git"
   },
   "author": "Lukonde Mwila",
   "license": "ISC",
-  "homepage": "https://bitbucket.org/lukondemwila/nodejs-express-test#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
