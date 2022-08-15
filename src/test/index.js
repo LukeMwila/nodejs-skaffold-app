@@ -10,6 +10,6 @@ describe('Some controller', () => {
     const textResponse = res.body;
     expect(res.status).to.equal(200);
     expect(textResponse.text).to.be.a('string');
-    expect(textResponse.text).to.equal('Simple Node App Is Working As Expected!');
+    expect(textResponse.text).to.equal('Simple Node.js App Is Working As Expected!');
   });
 });
